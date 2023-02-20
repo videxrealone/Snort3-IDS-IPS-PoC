@@ -72,6 +72,10 @@ cd build
 sudo make
 sudo make install
 ```
+![image](https://user-images.githubusercontent.com/91763346/220186390-a79a8249-f2a6-4afe-9f39-8fa1084d743f.png)
+
+![image](https://user-images.githubusercontent.com/91763346/220186440-9a3e62a1-2ac4-4c9e-b9fb-c317afd8bdde.png)
+
 
 I need to note that there will be plenty of errors as there's too many missing dependencies that your linux system might not have so, just proceed to google the error and use stackoverflow to find how you can install them.
 
@@ -86,6 +90,9 @@ Now to facilitate the execution we need to setup a symbolic link for the binary 
 ```
 ln -s /usr/local/bin/snort /usr/sbin/snort
 ```
+
+![image](https://user-images.githubusercontent.com/91763346/220186571-0d347ac6-cd60-4201-bd76-99161f3fd58e.png)
+
 
 That was everything for the installation we can check to see if Snort works with the following command:
 ```
