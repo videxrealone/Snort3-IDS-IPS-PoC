@@ -109,11 +109,21 @@ ip link set dev eth0 promisc on
 ethtool -k eth0 | grep receive-offload
 ethtool -K eth0 gro off lro off
 ```
+![image](https://user-images.githubusercontent.com/91763346/220417687-df3763a9-fa17-447a-9e34-859533a51801.png)
+
+![image](https://user-images.githubusercontent.com/91763346/220417769-952c4b1a-f27f-4d9d-bfba-fa67e36d1fe9.png)
+
+![image](https://user-images.githubusercontent.com/91763346/220417838-ebcc5a9d-2e8a-4663-ab6d-6705f6fec233.png)
+
+
 Now we need to create and activate the system service
 
 ```
 nano /etc/systemd/system/snort3-nic.service
 ```
+
+![image](https://user-images.githubusercontent.com/91763346/220417942-d4f5df2a-cfc5-4e10-89a3-2239a6d6fa38.png)
+
 
 I'll just copy and paste the following code to make the snort service running.
 
@@ -137,6 +147,11 @@ Now we should restart the daemons services.
 systemctl daemon-reload
 systemctl enable --now snort3-nic.service
 ```
+![image](https://user-images.githubusercontent.com/91763346/220418125-7387bd6d-2a09-494d-85ff-985aae6613a3.png)
+
+![image](https://user-images.githubusercontent.com/91763346/220418261-a98cc795-becd-47bb-8451-ed25b2ad83fb.png)
+
+
 At this point, the only way to run snort is with root.
 We can bypass this by just making the binary executable via a "snort" Group.
 We can execute the following commands:
@@ -146,6 +161,11 @@ sudo groupadd snort
 sudo useradd snort -r -s /sbin/nologin -c SNORT_IDS -g snort
 ```
 
+![image](https://user-images.githubusercontent.com/91763346/220418310-0fdb1c72-46a3-4a04-b1fc-0393b5aae625.png)
+
+![image](https://user-images.githubusercontent.com/91763346/220418387-ccc38afb-7ecb-4afb-916f-d506a94a45f1.png)
+
+
 In order to host the config for snort, we need to create some directories that will contain the log and rules for snort.
 
 ```
@@ -153,6 +173,9 @@ sudo mkdir -p /usr/local/etc/snort/rules
 sudo mkdir /var/log/snort
 sudo mkdir /usr/local/lib/snort_dynamicrules
 ```
+![image](https://user-images.githubusercontent.com/91763346/220418487-cb29d79c-29ff-4fc8-9c7e-1063a730bf2c.png)
+
+
 We need to fix the permissions for those directories
 
 ```
@@ -163,6 +186,8 @@ sudo chown -R snort:snort /usr/local/etc/snort
 sudo chown -R snort:snort /var/log/snort
 sudo chown -R snort:snort /usr/local/lib/snort_dynamicrules
 ```
+![image](https://user-images.githubusercontent.com/91763346/220418548-0b9c7ddf-d7cf-4fa4-bb2f-7e975866086f.png)
+
 
 We also need to create some rules files.
 
@@ -172,6 +197,9 @@ sudo touch /usr/local/etc/snort/rules/black_list.rules
 sudo touch /usr/local/etc/snort/rules/local.rules
 ```
 
+![image](https://user-images.githubusercontent.com/91763346/220418625-8705cc5b-e012-4b07-800c-6446a18bf682.png)
+
+
 We need to setup community rules properly and user-based rules.
 
 ```
@@ -180,10 +208,18 @@ mv snort3-community-rules.tar.gz /usr/local/etc/snort/rules/
 tar xz -f snort3-community-rules.tar.gz
 ```
 
+![image](https://user-images.githubusercontent.com/91763346/220418769-044be151-b69d-45c7-b576-9114851134cd.png)
+
+![image](https://user-images.githubusercontent.com/91763346/220419079-9c5c8728-4709-407f-b343-f4a9a32d3c87.png)
+
 ```
 wget https://www.snort.org/rules/snortrules-snapshot-3000.tar.gz?oinkcode=REDACTEDAPI -O ~/registered.tar.gz
 sudo tar -xvf ~/registered.tar.gz -C /usr/local/etc/snort/
 ```
+![image](https://user-images.githubusercontent.com/91763346/220419277-08dc2ddd-63f7-45b5-be48-3adabe1ee8dd.png)
+
+![image](https://user-images.githubusercontent.com/91763346/220419355-d297883d-ee96-4078-9950-daf26096dfa7.png)
+
 
 * Setting up rules and network configuration
 
@@ -197,6 +233,9 @@ In this config file, we need to edit the HOME_NET and set it to the public IP ad
 ```
 ifconfig
 ```
+
+![image](https://user-images.githubusercontent.com/91763346/220419696-3a0dce7f-50a9-4393-98e9-5a83de1206f2.png)
+
 
 Now back to the file, we will proceed with adding the rule path (Look for a "IPS {").
 
@@ -213,6 +252,9 @@ Snort has a builtin testing mode that can be run with the following command:
 ```
 sudo snort -T -c /usr/local/etc/snort/snort.lua
 ```
+
+![image](https://user-images.githubusercontent.com/91763346/220419773-c718d3a7-8997-4b27-b33b-fc02a00c4344.png)
+
 
 * Testing the Configuration
 
