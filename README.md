@@ -270,6 +270,9 @@ alert icmp any any -> $HOME_NET any (msg:"ICMP test";sid:10000001; rev:001;)
 Now we should start with a simple pinging test.
 We will run snort as an IDS with the following command:
 
+![image](https://user-images.githubusercontent.com/91763346/222965974-c18b4be6-1863-42e9-a313-4d0120280541.png)
+
+
 ```
 sudo snort -A alert_fast -i eth0 -u snort -g snort -c /usr/local/etc/snort/snort.lua –R /usr/local/etc/snort/rules/local.rules
 ```
@@ -295,6 +298,8 @@ snort -vde -b arp
 ## Custom Domain Rules
 We can use snort to alert certain traffic to a specific domain.
 In my case I'm going to create a rule that alerts if it detects any traffic related to Facebook.
+
 ```
 alert tcp $HOME_NET any -> $EXTERNAL_NET $HTTP_PORTS (msg:"Access to Facebook.com"; content:"Host: "; nocase; content:"facebook.com"; nocase; http.host; classtype:web-application-activity; sid:1000001; rev:1;)
 
+```
