@@ -273,3 +273,28 @@ We will run snort as an IDS with the following command:
 ```
 sudo snort -A alert_fast -i eth0 -u snort -g snort -c /usr/local/etc/snort/snort.lua –R /usr/local/etc/snort/rules/local.rules
 ```
+
+## Testing Scenarios
+
+We will be testing Snort as a sniffer, we will be launching the it with the following options
+
+```
+snort -v -d -e
+```
+-v is used to enable sniffer mode.
+-d to show application data in the captured packets.
+-e to show link headers.
+
+We can also specify the protocol to sniff with the following options
+```
+snort -vde -b arp
+```
+-b is used to specify that specific protocol traffic and dump it in a pcap file in the log folder.
+
+
+## Custom Domain Rules
+We can use snort to alert certain traffic to a specific domain.
+In my case I'm going to create a rule that alerts if it detects any traffic related to Facebook.
+```
+alert tcp $HOME_NET any -> $EXTERNAL_NET $HTTP_PORTS (msg:"Access to Facebook.com"; content:"Host: "; nocase; content:"facebook.com"; nocase; http.host; classtype:web-application-activity; sid:1000001; rev:1;)
+
